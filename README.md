@@ -63,3 +63,4 @@ docker-copomse up -d
 ## TODO
 1. add more endpoint
 2. create a demo app
+3. create api docs
