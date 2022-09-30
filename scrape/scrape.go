@@ -2,6 +2,7 @@ package scrape
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"os"
 	"strings"
@@ -104,8 +105,6 @@ func AnimeDetail(w http.ResponseWriter, r *http.Request) {
 	var result utils.AnimeDetailResponse
 	root := document.Find(".fotoanime")
 
-	// TODO: check if id is correct
-
 	result.Thumbnail = root.Find("img").AttrOr("src", "")
 	result.Id = params["id"]
 	root.Find(".infozin .infozingle p span").Each(func(i int, s *goquery.Selection) {
@@ -155,13 +154,24 @@ func AnimeDetail(w http.ResponseWriter, r *http.Request) {
 	})
 	result.Episode = episodes
 
-	bytes, err := json.Marshal(utils.DefaultResponse[utils.AnimeDetailResponse]{
-		Code: 200,
-		Data: result,
-	})
-	utils.PanicIfError(err, w, r)
+	if result.Title == "" {
+		bytes, err := json.Marshal(utils.DefaultResponse[string]{
+			Code: 404,
+			Data: "Anime Not Found",
+		})
 
-	utils.NewSuccessResponse(string(bytes), w, r)
+		utils.PanicIfError(err, w, r)
+
+		utils.NewCustomResponse(string(bytes), 404, w, r)
+	} else {
+		bytes, err := json.Marshal(utils.DefaultResponse[utils.AnimeDetailResponse]{
+			Code: 200,
+			Data: result,
+		})
+		utils.PanicIfError(err, w, r)
+
+		utils.NewSuccessResponse(string(bytes), w, r)
+	}
 }
 
 func EpisodeDetail(w http.ResponseWriter, r *http.Request) {
@@ -200,11 +210,73 @@ func EpisodeDetail(w http.ResponseWriter, r *http.Request) {
 	})
 	result.Urls = urls
 
-	bytes, err := json.Marshal(utils.DefaultResponse[utils.EpisodeDetail]{
-		Code: 200,
-		Data: result,
-	})
+	if result.Urls == nil {
+		bytes, err := json.Marshal(utils.DefaultResponse[string]{
+			Code: 404,
+			Data: "Episode Not Found",
+		})
+
+		utils.PanicIfError(err, w, r)
+
+		utils.NewCustomResponse(string(bytes), 404, w, r)
+	} else {
+		bytes, err := json.Marshal(utils.DefaultResponse[utils.EpisodeDetail]{
+			Code: 200,
+			Data: result,
+		})
+		utils.PanicIfError(err, w, r)
+
+		utils.NewSuccessResponse(string(bytes), w, r)
+	}
+}
+
+func FindAnime(w http.ResponseWriter, r *http.Request) {
+	search := r.URL.Query().Get("s")
+
+	url := fmt.Sprintf("%s?s=%s&post_type=anime", ENDPOINT, search)
+	resp, err := http.Get(url)
+	utils.PanicIfError(err, w, r)
+	defer resp.Body.Close()
+
+	if resp.StatusCode != 200 {
+		utils.PanicIfError(err, w, r)
+	}
+
+	document, err := goquery.NewDocumentFromReader(resp.Body)
 	utils.PanicIfError(err, w, r)
 
-	utils.NewSuccessResponse(string(bytes), w, r)
+	var result []utils.FindAnimeResponse
+	document.Find(".page .chivsrc li").Each(func(i int, s *goquery.Selection) {
+		var anime utils.FindAnimeResponse
+
+		anime.Thumbnail = s.Find("img").AttrOr("src", "")
+		anime.Title = s.Find("h2 a").Text()
+		anime.Url = s.Find("h2 a").AttrOr("href", "")
+
+		// get anime id
+		d := strings.Split(anime.Url, "/")
+		anime.Id = d[4]
+
+		result = append(result, anime)
+	})
+
+	if len(result) < 1 {
+		bytes, err := json.Marshal(utils.DefaultResponse[string]{
+			Code: 404,
+			Data: "Anime Not Found",
+		})
+
+		utils.PanicIfError(err, w, r)
+
+		utils.NewCustomResponse(string(bytes), 404, w, r)
+	} else {
+		bytes, err := json.Marshal(utils.DefaultResponse[[]utils.FindAnimeResponse]{
+			Code: 200,
+			Data: result,
+		})
+
+		utils.PanicIfError(err, w, r)
+
+		utils.NewSuccessResponse(string(bytes), w, r)
+	}
 }

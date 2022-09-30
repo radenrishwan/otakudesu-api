@@ -17,6 +17,7 @@ func main() {
 	r.HandleFunc("/api/anime-list", scrape.AnimeList)
 	r.HandleFunc("/api/anime/{id}", scrape.AnimeDetail)
 	r.HandleFunc("/api/episode/{id}", scrape.EpisodeDetail)
+	r.HandleFunc("/api/search", scrape.FindAnime)
 
 	r.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		result := map[string]any{

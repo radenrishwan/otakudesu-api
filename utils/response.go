@@ -61,9 +61,24 @@ type UrlInfo struct {
 	Resolution string
 }
 
+type FindAnimeResponse struct {
+	Id        string `json:"id"`
+	Title     string `json:"title"`
+	Thumbnail string `json:"thumbnail"`
+	Url       string `json:"url"`
+}
+
 func NewSuccessResponse(resp string, w http.ResponseWriter, r *http.Request) {
 	w.Header().Add("Content-Type", "application/json")
 	w.WriteHeader(200)
+
+	_, err := fmt.Fprint(w, resp)
+	PanicIfError(err, w, r)
+}
+
+func NewCustomResponse(resp string, code int, w http.ResponseWriter, r *http.Request) {
+	w.Header().Add("Content-Type", "application/json")
+	w.WriteHeader(code)
 
 	_, err := fmt.Fprint(w, resp)
 	PanicIfError(err, w, r)
