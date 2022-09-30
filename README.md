@@ -60,7 +60,20 @@ you can also running using docker compose
 docker-copomse up -d
 ```
 
+## API Docs
+endpoint : https://scraping-2wepigvexa-et.a.run.app/
+
+| endpoint          | params | description                               |
+|-------------------|--------|-------------------------------------------|
+| /                 | -      | health check                              |
+| /api/home         | -      | get latest upload anime                   |
+| /api/anime-list   | -      | get anime list                            |
+| /api/anime/{id}   | -      | get anime by id                           |
+| /api/episode/{id} | -      | get anime episode and download link by id |
+| /api/search       | s      | find anime                                |
+
+
 ## TODO
 1. add more endpoint
 2. create a demo app
-3. create api docs
+3. create api docs ✅
