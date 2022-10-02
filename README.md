@@ -40,16 +40,16 @@ git clone https://github.com/radenrishwan/otakudesu-api
 
 2. Build docker image
 ```bash
-docker build -t otakudesu-api:1.0.0 . 
+docker build -t otakudesu-api:1.2.0 . 
 ```
 or you can also pull from dockerhub
 ```
-docker pull radenrishwan/otakudesu-api:1.0.0
+docker pull radenrishwan/otakudesu-api:1.2.0
 ```
 
 3. Create container and run
 ```
-docker run -it -p 8080:8080 [IMAGE-NAME]
+docker run -it -p 8080:8080 -e ENDPOINT='https://otakudesu.video/' radenrishwan/otakudesu-api:1.2.0
 ```
 
 ### Using docker compose
