@@ -208,9 +208,12 @@ func EpisodeDetail(w http.ResponseWriter, r *http.Request) {
 		})
 
 	})
-	result.Urls = urls
+	result.DownloadUrls = urls
 
-	if result.Urls == nil {
+	// find streaming url
+	result.StreamUrl = root.Find("iframe").AttrOr("src", "")
+
+	if result.DownloadUrls == nil {
 		bytes, err := json.Marshal(utils.DefaultResponse[string]{
 			Code: 404,
 			Data: "Episode Not Found",

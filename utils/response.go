@@ -49,16 +49,17 @@ type AnimeDetailEpisode struct {
 }
 
 type EpisodeDetail struct {
-	Id    string    `json:"id"`
-	Title string    `json:"title"`
-	Urls  []UrlInfo `json:"urls"`
+	Id           string    `json:"id"`
+	Title        string    `json:"title"`
+	DownloadUrls []UrlInfo `json:"download_urls"`
+	StreamUrl    string    `json:"stream_url"`
 }
 
 type UrlInfo struct {
-	Host       string
-	Url        string
-	Size       string
-	Resolution string
+	Host       string `json:"host"`
+	Url        string `json:"url"`
+	Size       string `json:"size"`
+	Resolution string `json:"resolution"`
 }
 
 type FindAnimeResponse struct {
