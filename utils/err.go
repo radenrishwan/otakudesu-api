@@ -7,7 +7,7 @@ import (
 	"net/http"
 )
 
-func PanicIfError(err error, w http.ResponseWriter, r *http.Request) {
+func PanicIfError(err error) {
 	if err != nil {
 		panic(err)
 	}

@@ -84,7 +84,7 @@ func NewSuccessResponse(resp string, w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(200)
 
 	_, err := fmt.Fprint(w, resp)
-	PanicIfError(err, w, r)
+	PanicIfError(err)
 }
 
 func NewCustomResponse(resp string, code int, w http.ResponseWriter, r *http.Request) {
@@ -92,5 +92,5 @@ func NewCustomResponse(resp string, code int, w http.ResponseWriter, r *http.Req
 	w.WriteHeader(code)
 
 	_, err := fmt.Fprint(w, resp)
-	PanicIfError(err, w, r)
+	PanicIfError(err)
 }

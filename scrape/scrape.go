@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"log"
 	"net/http"
 	"os"
 	"strconv"
@@ -21,15 +20,15 @@ var (
 
 func HomePage(w http.ResponseWriter, r *http.Request) {
 	resp, err := http.Get(ENDPOINT)
-	utils.PanicIfError(err, w, r)
+	utils.PanicIfError(err)
 	defer resp.Body.Close()
 
 	if resp.StatusCode != 200 {
-		utils.PanicIfError(err, w, r)
+		utils.PanicIfError(err)
 	}
 
 	document, err := goquery.NewDocumentFromReader(resp.Body)
-	utils.PanicIfError(err, w, r)
+	utils.PanicIfError(err)
 
 	var result []utils.HomePageResponse
 	document.Find(".detpost").Each(func(i int, selection *goquery.Selection) {
@@ -51,22 +50,22 @@ func HomePage(w http.ResponseWriter, r *http.Request) {
 		Code: 200,
 		Data: result,
 	})
-	utils.PanicIfError(err, w, r)
+	utils.PanicIfError(err)
 
 	utils.NewSuccessResponse(string(bytes), w, r)
 }
 
 func AnimeList(w http.ResponseWriter, r *http.Request) {
 	resp, err := http.Get(ENDPOINT + "anime-list-2")
-	utils.PanicIfError(err, w, r)
+	utils.PanicIfError(err)
 	defer resp.Body.Close()
 
 	if resp.StatusCode != 200 {
-		utils.PanicIfError(err, w, r)
+		utils.PanicIfError(err)
 	}
 
 	document, err := goquery.NewDocumentFromReader(resp.Body)
-	utils.PanicIfError(err, w, r)
+	utils.PanicIfError(err)
 
 	var result []utils.AnimeListResponse
 	document.Find("ul li .hodebgst").Each(func(i int, selection *goquery.Selection) {
@@ -86,7 +85,7 @@ func AnimeList(w http.ResponseWriter, r *http.Request) {
 		Code: 200,
 		Data: result,
 	})
-	utils.PanicIfError(err, w, r)
+	utils.PanicIfError(err)
 
 	utils.NewSuccessResponse(string(bytes), w, r)
 }
@@ -95,15 +94,15 @@ func AnimeDetail(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 
 	resp, err := http.Get(ENDPOINT + "anime/" + params["id"])
-	utils.PanicIfError(err, w, r)
+	utils.PanicIfError(err)
 	defer resp.Body.Close()
 
 	if resp.StatusCode != 200 {
-		utils.PanicIfError(err, w, r)
+		utils.PanicIfError(err)
 	}
 
 	document, err := goquery.NewDocumentFromReader(resp.Body)
-	utils.PanicIfError(err, w, r)
+	utils.PanicIfError(err)
 
 	var result utils.AnimeDetailResponse
 	root := document.Find(".fotoanime")
@@ -163,7 +162,7 @@ func AnimeDetail(w http.ResponseWriter, r *http.Request) {
 			Data: "Anime Not Found",
 		})
 
-		utils.PanicIfError(err, w, r)
+		utils.PanicIfError(err)
 
 		utils.NewCustomResponse(string(bytes), 404, w, r)
 	} else {
@@ -171,7 +170,7 @@ func AnimeDetail(w http.ResponseWriter, r *http.Request) {
 			Code: 200,
 			Data: result,
 		})
-		utils.PanicIfError(err, w, r)
+		utils.PanicIfError(err)
 
 		utils.NewSuccessResponse(string(bytes), w, r)
 	}
@@ -181,15 +180,15 @@ func EpisodeDetail(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 
 	resp, err := http.Get(ENDPOINT + "episode/" + params["id"])
-	utils.PanicIfError(err, w, r)
+	utils.PanicIfError(err)
 	defer resp.Body.Close()
 
 	if resp.StatusCode != 200 {
-		utils.PanicIfError(err, w, r)
+		utils.PanicIfError(err)
 	}
 
 	document, err := goquery.NewDocumentFromReader(resp.Body)
-	utils.PanicIfError(err, w, r)
+	utils.PanicIfError(err)
 
 	var result utils.EpisodeDetail
 	root := document.Find(".venser .venutama")
@@ -222,7 +221,7 @@ func EpisodeDetail(w http.ResponseWriter, r *http.Request) {
 			Data: "Episode Not Found",
 		})
 
-		utils.PanicIfError(err, w, r)
+		utils.PanicIfError(err)
 
 		utils.NewCustomResponse(string(bytes), 404, w, r)
 	} else {
@@ -230,7 +229,7 @@ func EpisodeDetail(w http.ResponseWriter, r *http.Request) {
 			Code: 200,
 			Data: result,
 		})
-		utils.PanicIfError(err, w, r)
+		utils.PanicIfError(err)
 
 		utils.NewSuccessResponse(string(bytes), w, r)
 	}
@@ -241,15 +240,15 @@ func FindAnime(w http.ResponseWriter, r *http.Request) {
 
 	url := fmt.Sprintf("%s?s=%s&post_type=anime", ENDPOINT, search)
 	resp, err := http.Get(url)
-	utils.PanicIfError(err, w, r)
+	utils.PanicIfError(err)
 	defer resp.Body.Close()
 
 	if resp.StatusCode != 200 {
-		utils.PanicIfError(err, w, r)
+		utils.PanicIfError(err)
 	}
 
 	document, err := goquery.NewDocumentFromReader(resp.Body)
-	utils.PanicIfError(err, w, r)
+	utils.PanicIfError(err)
 
 	var result []utils.FindAnimeResponse
 	document.Find(".page .chivsrc li").Each(func(i int, s *goquery.Selection) {
@@ -272,7 +271,7 @@ func FindAnime(w http.ResponseWriter, r *http.Request) {
 			Data: "Anime Not Found",
 		})
 
-		utils.PanicIfError(err, w, r)
+		utils.PanicIfError(err)
 
 		utils.NewCustomResponse(string(bytes), 404, w, r)
 	} else {
@@ -281,7 +280,7 @@ func FindAnime(w http.ResponseWriter, r *http.Request) {
 			Data: result,
 		})
 
-		utils.PanicIfError(err, w, r)
+		utils.PanicIfError(err)
 
 		utils.NewSuccessResponse(string(bytes), w, r)
 	}
@@ -291,24 +290,24 @@ func AnimeOnGoing(w http.ResponseWriter, r *http.Request) {
 	page := r.URL.Query().Get("page")
 
 	if page == "" {
-		utils.PanicIfError(errors.New("page is required"), w, r)
+		utils.PanicIfError(errors.New("page is required"))
 	}
 
 	_, err := strconv.Atoi(page)
 	if err != nil {
-		utils.PanicIfError(errors.New("page must be number"), w, r)
+		utils.PanicIfError(errors.New("page must be number"))
 	}
 
 	resp, err := http.Get(ENDPOINT + "ongoing-anime/page/" + page)
-	utils.PanicIfError(err, w, r)
+	utils.PanicIfError(err)
 	defer resp.Body.Close()
 
 	if resp.StatusCode != 200 {
-		utils.PanicIfError(err, w, r)
+		utils.PanicIfError(err)
 	}
 
 	document, err := goquery.NewDocumentFromReader(resp.Body)
-	utils.PanicIfError(err, w, r)
+	utils.PanicIfError(err)
 
 	var result []utils.HomePageResponse
 	document.Find(".detpost").Each(func(i int, selection *goquery.Selection) {
@@ -330,7 +329,7 @@ func AnimeOnGoing(w http.ResponseWriter, r *http.Request) {
 		Code: 200,
 		Data: result,
 	})
-	utils.PanicIfError(err, w, r)
+	utils.PanicIfError(err)
 
 	utils.NewSuccessResponse(string(bytes), w, r)
 }
@@ -339,24 +338,24 @@ func AnimeComplete(w http.ResponseWriter, r *http.Request) {
 	page := r.URL.Query().Get("page")
 
 	if page == "" {
-		utils.PanicIfError(errors.New("page is required"), w, r)
+		utils.PanicIfError(errors.New("page is required"))
 	}
 
 	_, err := strconv.Atoi(page)
 	if err != nil {
-		utils.PanicIfError(errors.New("page must be number"), w, r)
+		utils.PanicIfError(errors.New("page must be number"))
 	}
 
 	resp, err := http.Get(ENDPOINT + "complete-anime/page/" + page)
-	utils.PanicIfError(err, w, r)
+	utils.PanicIfError(err)
 	defer resp.Body.Close()
 
 	if resp.StatusCode != 200 {
-		utils.PanicIfError(err, w, r)
+		utils.PanicIfError(err)
 	}
 
 	document, err := goquery.NewDocumentFromReader(resp.Body)
-	utils.PanicIfError(err, w, r)
+	utils.PanicIfError(err)
 
 	var result []utils.HomePageResponse
 	document.Find(".detpost").Each(func(i int, selection *goquery.Selection) {
@@ -378,22 +377,22 @@ func AnimeComplete(w http.ResponseWriter, r *http.Request) {
 		Code: 200,
 		Data: result,
 	})
-	utils.PanicIfError(err, w, r)
+	utils.PanicIfError(err)
 
 	utils.NewSuccessResponse(string(bytes), w, r)
 }
 
 func AnimeGenreList(w http.ResponseWriter, r *http.Request) {
 	resp, err := http.Get(ENDPOINT + "genre-list")
-	utils.PanicIfError(err, w, r)
+	utils.PanicIfError(err)
 	defer resp.Body.Close()
 
 	if resp.StatusCode != 200 {
-		utils.PanicIfError(err, w, r)
+		utils.PanicIfError(err)
 	}
 
 	document, err := goquery.NewDocumentFromReader(resp.Body)
-	utils.PanicIfError(err, w, r)
+	utils.PanicIfError(err)
 
 	var result []string
 	document.Find(".genres li a").Each(func(i int, selection *goquery.Selection) {
@@ -405,7 +404,7 @@ func AnimeGenreList(w http.ResponseWriter, r *http.Request) {
 		Code: 200,
 		Data: result,
 	})
-	utils.PanicIfError(err, w, r)
+	utils.PanicIfError(err)
 
 	utils.NewSuccessResponse(string(bytes), w, r)
 }
@@ -414,27 +413,26 @@ func AnimeFindByGenre(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 
 	resp, err := http.Get(ENDPOINT + "genres/" + params["genre"])
-	utils.PanicIfError(err, w, r)
+	utils.PanicIfError(err)
 	defer resp.Body.Close()
 
 	if resp.StatusCode != 200 {
-		utils.PanicIfError(err, w, r)
+		utils.PanicIfError(err)
 	}
 
 	document, err := goquery.NewDocumentFromReader(resp.Body)
-	utils.PanicIfError(err, w, r)
+	utils.PanicIfError(err)
 
-	// log.Println(document.HasClass("col-anime-studio"))
+	html, err := document.Html()
+	utils.PanicIfError(err)
 
-	// if !(document.HasClass(".col-anime-studio") && document.HasClass(".col-anime-genre")) {
-	// 	utils.PanicIfError(errors.New("genre not found"), w, r)
-	// }
+	if !(strings.Contains(html, "col-anime-con")) {
+		utils.PanicIfError(errors.New("genre not found"))
+	}
 
 	var result []utils.FindAnimeByGenreResponse
 	document.Find(".col-anime-con .col-anime").Each(func(i int, selection *goquery.Selection) {
 		var anime utils.FindAnimeByGenreResponse
-
-		log.Println(selection.Html())
 
 		anime.Url = selection.Find(".col-anime-title a").AttrOr("href", "")
 		anime.Thumbnail = selection.Find(".col-anime-cover img").AttrOr("src", "")
@@ -458,11 +456,11 @@ func AnimeFindByGenre(w http.ResponseWriter, r *http.Request) {
 		result = append(result, anime)
 	})
 
-	bytes, err := json.Marshal(utils.DefaultResponse[[]utils.FindAnimeByGenreResponse]{
+	res, err := json.Marshal(utils.DefaultResponse[[]utils.FindAnimeByGenreResponse]{
 		Code: 200,
 		Data: result,
 	})
-	utils.PanicIfError(err, w, r)
+	utils.PanicIfError(err)
 
-	utils.NewSuccessResponse(string(bytes), w, r)
+	utils.NewSuccessResponse(string(res), w, r)
 }

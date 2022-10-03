@@ -36,7 +36,7 @@ func main() {
 			Code: 200,
 			Data: result,
 		})
-		utils.PanicIfError(err, w, r)
+		utils.PanicIfError(err)
 
 		utils.NewSuccessResponse(string(bytes), w, r)
 	})
