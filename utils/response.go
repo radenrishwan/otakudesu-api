@@ -69,6 +69,16 @@ type FindAnimeResponse struct {
 	Url       string `json:"url"`
 }
 
+type FindAnimeByGenreResponse struct {
+	Id        string   `json:"id"`
+	Title     string   `json:"title"`
+	Thumbnail string   `json:"thumbnail"`
+	Episode   string   `json:"episode"`
+	Genre     []string `json:"genre"`
+	Url       string   `json:"url"`
+	Score     string   `json:"score"`
+}
+
 func NewSuccessResponse(resp string, w http.ResponseWriter, r *http.Request) {
 	w.Header().Add("Content-Type", "application/json")
 	w.WriteHeader(200)

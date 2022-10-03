@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"log"
 	"net/http"
 	"os"
 	"strconv"
@@ -374,6 +375,90 @@ func AnimeComplete(w http.ResponseWriter, r *http.Request) {
 	})
 
 	bytes, err := json.Marshal(utils.DefaultResponse[[]utils.HomePageResponse]{
+		Code: 200,
+		Data: result,
+	})
+	utils.PanicIfError(err, w, r)
+
+	utils.NewSuccessResponse(string(bytes), w, r)
+}
+
+func AnimeGenreList(w http.ResponseWriter, r *http.Request) {
+	resp, err := http.Get(ENDPOINT + "genre-list")
+	utils.PanicIfError(err, w, r)
+	defer resp.Body.Close()
+
+	if resp.StatusCode != 200 {
+		utils.PanicIfError(err, w, r)
+	}
+
+	document, err := goquery.NewDocumentFromReader(resp.Body)
+	utils.PanicIfError(err, w, r)
+
+	var result []string
+	document.Find(".genres li a").Each(func(i int, selection *goquery.Selection) {
+		genre := strings.ToLower(selection.Text())
+		result = append(result, genre)
+	})
+
+	bytes, err := json.Marshal(utils.DefaultResponse[[]string]{
+		Code: 200,
+		Data: result,
+	})
+	utils.PanicIfError(err, w, r)
+
+	utils.NewSuccessResponse(string(bytes), w, r)
+}
+
+func AnimeFindByGenre(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+
+	resp, err := http.Get(ENDPOINT + "genres/" + params["genre"])
+	utils.PanicIfError(err, w, r)
+	defer resp.Body.Close()
+
+	if resp.StatusCode != 200 {
+		utils.PanicIfError(err, w, r)
+	}
+
+	document, err := goquery.NewDocumentFromReader(resp.Body)
+	utils.PanicIfError(err, w, r)
+
+	// log.Println(document.HasClass("col-anime-studio"))
+
+	// if !(document.HasClass(".col-anime-studio") && document.HasClass(".col-anime-genre")) {
+	// 	utils.PanicIfError(errors.New("genre not found"), w, r)
+	// }
+
+	var result []utils.FindAnimeByGenreResponse
+	document.Find(".col-anime-con .col-anime").Each(func(i int, selection *goquery.Selection) {
+		var anime utils.FindAnimeByGenreResponse
+
+		log.Println(selection.Html())
+
+		anime.Url = selection.Find(".col-anime-title a").AttrOr("href", "")
+		anime.Thumbnail = selection.Find(".col-anime-cover img").AttrOr("src", "")
+		anime.Title = selection.Find(".col-anime-title a").Text()
+		anime.Episode = selection.Find(".col-anime-eps").Text()
+		anime.Score = selection.Find(".col-anime-rating").Text()
+
+		// get anime id
+		anime.Id = selection.Find(".col-anime-thumb a").AttrOr("href", "")
+		d := strings.Split(anime.Url, "/")
+		anime.Id = d[4]
+
+		// find genre
+		var genre []string
+		selection.Find(".col-anime-genre a").Each(func(i int, s *goquery.Selection) {
+			genre = append(genre, s.Text())
+		})
+
+		anime.Genre = genre
+
+		result = append(result, anime)
+	})
+
+	bytes, err := json.Marshal(utils.DefaultResponse[[]utils.FindAnimeByGenreResponse]{
 		Code: 200,
 		Data: result,
 	})
