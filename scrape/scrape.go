@@ -2,9 +2,11 @@ package scrape
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 	"os"
+	"strconv"
 	"strings"
 
 	"github.com/PuerkitoBio/goquery"
@@ -282,4 +284,100 @@ func FindAnime(w http.ResponseWriter, r *http.Request) {
 
 		utils.NewSuccessResponse(string(bytes), w, r)
 	}
+}
+
+func AnimeOnGoing(w http.ResponseWriter, r *http.Request) {
+	page := r.URL.Query().Get("page")
+
+	if page == "" {
+		utils.PanicIfError(errors.New("page is required"), w, r)
+	}
+
+	_, err := strconv.Atoi(page)
+	if err != nil {
+		utils.PanicIfError(errors.New("page must be number"), w, r)
+	}
+
+	resp, err := http.Get(ENDPOINT + "ongoing-anime/page/" + page)
+	utils.PanicIfError(err, w, r)
+	defer resp.Body.Close()
+
+	if resp.StatusCode != 200 {
+		utils.PanicIfError(err, w, r)
+	}
+
+	document, err := goquery.NewDocumentFromReader(resp.Body)
+	utils.PanicIfError(err, w, r)
+
+	var result []utils.HomePageResponse
+	document.Find(".detpost").Each(func(i int, selection *goquery.Selection) {
+		var anime utils.HomePageResponse
+
+		anime.Episode = selection.Find(".epz").Text()
+		anime.Url = selection.Find(".thumb a").AttrOr("href", "")
+		anime.Thumbnail = selection.Find(".thumb a .thumbz img").AttrOr("src", "")
+		anime.Title = selection.Find(".thumb a .thumbz h2").Text()
+
+		// get anime id
+		d := strings.Split(anime.Url, "/")
+		anime.Id = d[4]
+
+		result = append(result, anime)
+	})
+
+	bytes, err := json.Marshal(utils.DefaultResponse[[]utils.HomePageResponse]{
+		Code: 200,
+		Data: result,
+	})
+	utils.PanicIfError(err, w, r)
+
+	utils.NewSuccessResponse(string(bytes), w, r)
+}
+
+func AnimeComplete(w http.ResponseWriter, r *http.Request) {
+	page := r.URL.Query().Get("page")
+
+	if page == "" {
+		utils.PanicIfError(errors.New("page is required"), w, r)
+	}
+
+	_, err := strconv.Atoi(page)
+	if err != nil {
+		utils.PanicIfError(errors.New("page must be number"), w, r)
+	}
+
+	resp, err := http.Get(ENDPOINT + "complete-anime/page/" + page)
+	utils.PanicIfError(err, w, r)
+	defer resp.Body.Close()
+
+	if resp.StatusCode != 200 {
+		utils.PanicIfError(err, w, r)
+	}
+
+	document, err := goquery.NewDocumentFromReader(resp.Body)
+	utils.PanicIfError(err, w, r)
+
+	var result []utils.HomePageResponse
+	document.Find(".detpost").Each(func(i int, selection *goquery.Selection) {
+		var anime utils.HomePageResponse
+
+		anime.Episode = selection.Find(".epz").Text()
+		anime.Url = selection.Find(".thumb a").AttrOr("href", "")
+		anime.Thumbnail = selection.Find(".thumb a .thumbz img").AttrOr("src", "")
+		anime.Title = selection.Find(".thumb a .thumbz h2").Text()
+
+		// get anime id
+		d := strings.Split(anime.Url, "/")
+		anime.Id = d[4]
+
+		result = append(result, anime)
+	})
+
+	bytes, err := json.Marshal(utils.DefaultResponse[[]utils.HomePageResponse]{
+		Code: 200,
+		Data: result,
+	})
+	utils.PanicIfError(err, w, r)
+
+	utils.NewSuccessResponse(string(bytes), w, r)
 }

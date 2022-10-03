@@ -13,8 +13,12 @@ import (
 func main() {
 	r := mux.NewRouter()
 
+	r.Use(utils.ErrorHandler)
+
 	r.HandleFunc("/api/home", scrape.HomePage)
 	r.HandleFunc("/api/anime-list", scrape.AnimeList)
+	r.HandleFunc("/api/anime/ongoing", scrape.AnimeOnGoing)
+	r.HandleFunc("/api/anime/complete", scrape.AnimeComplete)
 	r.HandleFunc("/api/anime/{id}", scrape.AnimeDetail)
 	r.HandleFunc("/api/episode/{id}", scrape.EpisodeDetail)
 	r.HandleFunc("/api/search", scrape.FindAnime)
