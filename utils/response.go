@@ -18,6 +18,11 @@ type HomePageResponse struct {
 	Episode   string `json:"episode"`
 }
 
+type HomeResponse struct {
+	Ongoing  []HomePageResponse `json:"ongoing"`
+	Complete []HomePageResponse `json:"complete"`
+}
+
 type AnimeListResponse struct {
 	Id    string `json:"id"`
 	Title string `json:"title"`
@@ -36,7 +41,7 @@ type AnimeDetailResponse struct {
 	Duration      string               `json:"duration"`
 	RealeaseDate  string               `json:"realease_date"`
 	Studio        string               `json:"studio"`
-	Genre         string               `json:"genre"`
+	Genre         string               `jsFon:"genre"`
 	Synopsis      string               `json:"synopsis"`
 	Episode       []AnimeDetailEpisode `json:"episode"`
 }
