@@ -39,7 +39,7 @@ type AnimeDetailResponse struct {
 	Type          string               `json:"type"`
 	Status        string               `json:"status"`
 	Duration      string               `json:"duration"`
-	RealeaseDate  string               `json:"realease_date"`
+	ReleaseDate   string               `json:"release_date"`
 	Studio        string               `json:"studio"`
 	Genre         string               `jsFon:"genre"`
 	Synopsis      string               `json:"synopsis"`
