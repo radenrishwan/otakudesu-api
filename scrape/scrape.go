@@ -132,7 +132,7 @@ func AnimeDetail(w http.ResponseWriter, r *http.Request) {
 		case 7:
 			result.Duration = utils.GetDetailInfo(s.Text())
 		case 8:
-			result.RealeaseDate = utils.GetDetailInfo(s.Text())
+			result.ReleaseDate = utils.GetDetailInfo(s.Text())
 		case 9:
 			result.Studio = utils.GetDetailInfo(s.Text())
 		case 10:
