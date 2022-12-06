@@ -63,17 +63,33 @@ docker-copomse up -d
 ## API Docs
 endpoint : https://scraping-psezlumomq-et.a.run.app/
 
-| endpoint          | params | description                               |
-|-------------------|--------|-------------------------------------------|
-| /                 | -      | health check                              |
-| /api/home         | -      | get latest upload anime                   |
-| /api/anime-list   | -      | get anime list                            |
-| /api/anime/{id}   | -      | get anime by id                           |
-| /api/episode/{id} | -      | get anime episode and download link by id |
-| /api/search       | s      | find anime                                |
+| endpoint                 | params | description                               |
+| ------------------------ | ------ | ----------------------------------------- |
+| /                        | -      | health check                              |
+| /api/home                | -      | get latest upload anime                   |
+| /api/anime-list          | -      | get anime list                            |
+| /api/genres              | -      | get anime genre                           |
+| /api/anime/ongoing       | page   | get ongoing anime                         |
+| /api/anime/complete      | page   | get complete anime                        |
+| /api/anime/genre/{genre} | -      | get anime by genre                        |
+| /api/anime/{id}          | -      | get anime by id                           |
+| /api/episode/{id}        | -      | get anime episode and download link by id |
+| /api/search              | s      | find anime                                |
+
+params description :
+- s
+    - description : search query
+    - data type: string
+    - example : `api/search?s=one piece` 
+- page
+    - description : page number
+    - data type: int
+    - example : `api/anime/ongoing?page=1`
 
 
 ## TODO
 1. add more endpoint
-2. create a demo app
-3. create api docs ✅
+2. add error response when params is not valid
+3. create a demo app ✅
+    here is app example using this api : [https://github.com/radenrishwan/otakudesu-app](https://github.com/radenrishwan/otakudesu-app) (Deprecated)
+5. create api docs ✅
