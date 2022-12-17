@@ -89,7 +89,7 @@ params description :
 
 ## TODO
 1. add more endpoint
-2. add error response when params is not valid
+2. add error response when params is not valid ✅
 3. create a demo app ✅
     here is app example using this api : [https://github.com/radenrishwan/otakudesu-app](https://github.com/radenrishwan/otakudesu-app) (Deprecated)
 5. create api docs ✅
