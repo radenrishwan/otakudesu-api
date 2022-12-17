@@ -62,7 +62,7 @@ func HomePage(w http.ResponseWriter, r *http.Request) {
 }
 
 func AnimeList(w http.ResponseWriter, r *http.Request) {
-	resp, err := http.Get(ENDPOINT + "anime-list-2")
+	resp, err := http.Get(ENDPOINT + "anime-list")
 	utils.PanicIfError(err)
 	defer resp.Body.Close()
 
