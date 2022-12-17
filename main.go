@@ -13,15 +13,17 @@ import (
 func main() {
 	r := mux.NewRouter()
 
-	r.HandleFunc("/api/home", scrape.HomePage)
-	r.HandleFunc("/api/anime-list", scrape.AnimeList)
-	r.HandleFunc("/api/genres", scrape.AnimeGenreList)
-	r.HandleFunc("/api/anime/ongoing", scrape.AnimeOnGoing)
-	r.HandleFunc("/api/anime/complete", scrape.AnimeComplete)
-	r.HandleFunc("/api/anime/genre/{genre}", scrape.AnimeFindByGenre)
-	r.HandleFunc("/api/anime/{id}", scrape.AnimeDetail)
-	r.HandleFunc("/api/episode/{id}", scrape.EpisodeDetail)
-	r.HandleFunc("/api/search", scrape.FindAnime)
+	r.Use(utils.ErrorHandler)
+
+	r.HandleFunc("/api/home", scrape.HomePage).Methods("GET")
+	r.HandleFunc("/api/anime-list", scrape.AnimeList).Methods("GET")
+	r.HandleFunc("/api/genres", scrape.AnimeGenreList).Methods("GET")
+	r.HandleFunc("/api/anime/ongoing", scrape.AnimeOnGoing).Methods("GET")
+	r.HandleFunc("/api/anime/complete", scrape.AnimeComplete).Methods("GET")
+	r.HandleFunc("/api/anime/genre/{genre}", scrape.AnimeFindByGenre).Methods("GET")
+	r.HandleFunc("/api/anime/{id}", scrape.AnimeDetail).Methods("GET")
+	r.HandleFunc("/api/episode/{id}", scrape.EpisodeDetail).Methods("GET")
+	r.HandleFunc("/api/search", scrape.FindAnime).Methods("GET")
 
 	r.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		result := map[string]any{
