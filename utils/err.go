@@ -7,12 +7,14 @@ import (
 	"net/http"
 )
 
+// PanicIfError helper function to panic if error is not nil
 func PanicIfError(err error) {
 	if err != nil {
 		panic(err)
 	}
 }
 
+// ErrorHandler is handler for handle error
 func ErrorHandler(h http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		defer handleError(w, r)
@@ -21,6 +23,7 @@ func ErrorHandler(h http.Handler) http.Handler {
 	})
 }
 
+// handleError recover all error and write error response
 func handleError(w http.ResponseWriter, r *http.Request) {
 	errHandle := recover()
 

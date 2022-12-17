@@ -84,6 +84,7 @@ type FindAnimeByGenreResponse struct {
 	Score     string   `json:"score"`
 }
 
+// NewSuccessResponse create new response when success
 func NewSuccessResponse(resp string, w http.ResponseWriter, r *http.Request) {
 	w.Header().Add("Content-Type", "application/json")
 	w.WriteHeader(200)
@@ -92,6 +93,7 @@ func NewSuccessResponse(resp string, w http.ResponseWriter, r *http.Request) {
 	PanicIfError(err)
 }
 
+// NewCustomResponse with custom status code
 func NewCustomResponse(resp string, code int, w http.ResponseWriter, r *http.Request) {
 	w.Header().Add("Content-Type", "application/json")
 	w.WriteHeader(code)
