@@ -1,7 +1,7 @@
 # Otakudesu API
 an Unofficial API for [otakudesu](https://otakudesu.video)
 
-you can access demo here [https://scraping-psezlumomq-et.a.run.app/](https://scraping-psezlumomq-et.a.run.app/)
+you can access demo here [https://otakudesu-api-psezlumomq-as.a.run.app](https://otakudesu-api-psezlumomq-as.a.run.app) (this is temporary url).
 ## Usage
 ### NOTE
 before running server, you need to export otakudesu endpoint. you can see at .env file for command or type command below
@@ -61,7 +61,7 @@ docker-copomse up -d
 ```
 
 ## API Docs
-endpoint : https://scraping-psezlumomq-et.a.run.app/
+endpoint : https://otakudesu-api-psezlumomq-as.a.run.app/
 
 | endpoint                 | params | description                               |
 | ------------------------ | ------ | ----------------------------------------- |
