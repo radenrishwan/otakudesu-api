@@ -40,11 +40,11 @@ git clone https://github.com/radenrishwan/otakudesu-api
 
 2. Build docker image
 ```bash
-docker build -t otakudesu-api:1.2.0 . 
+docker build -t otakudesu-api:1.3.1 . 
 ```
 or you can also pull from dockerhub
 ```
-docker pull radenrishwan/otakudesu-api:1.2.0
+docker pull radenrishwan/otakudesu-api:1.3.1
 ```
 
 3. Create container and run
