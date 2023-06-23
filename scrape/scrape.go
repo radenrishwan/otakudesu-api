@@ -46,8 +46,8 @@ func HomePage(w http.ResponseWriter, r *http.Request) {
 		result = append(result, anime)
 	})
 
-	ongoing := result[0 : (len(result)-1)/2]
-	complete := result[(len(result)-1)/2 : len(result)-1]
+	ongoing := result[0:15]
+	complete := result[15:25]
 
 	bytes, err := json.Marshal(utils.DefaultResponse[utils.HomeResponse]{
 		Code: 200,
