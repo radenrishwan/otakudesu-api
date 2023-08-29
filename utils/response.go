@@ -41,7 +41,7 @@ type AnimeDetailResponse struct {
 	Duration      string               `json:"duration"`
 	ReleaseDate   string               `json:"release_date"`
 	Studio        string               `json:"studio"`
-	Genre         string               `jsFon:"genre"`
+	Genre         string               `json:"genre"`
 	Synopsis      string               `json:"synopsis"`
 	Episode       []AnimeDetailEpisode `json:"episode"`
 }
