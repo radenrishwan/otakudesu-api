@@ -1,7 +1,7 @@
 # Otakudesu API
 an Unofficial API for [otakudesu](https://otakudesu.video)
 
-you can access demo here [otakudesu.up.railway.app](otakudesu.up.railway.app) (this is temporary url).
+you can access demo here [otakudesu.up.railway.app](https://otakudesu.up.railway.app) (this is temporary url).
 ## Usage
 ### NOTE
 before running server, you need to export otakudesu endpoint. you can see at .env file for command or type command below
