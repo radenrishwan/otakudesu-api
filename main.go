@@ -2,15 +2,27 @@ package main
 
 import (
 	"encoding/json"
+	"flag"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/gorilla/mux"
 	"github.com/radenrishwan/otakudesu-api/scrape"
 	"github.com/radenrishwan/otakudesu-api/utils"
 )
 
+var ()
+
 func main() {
+	envPort := os.Getenv("PORT")
+	port := flag.String("port", envPort, "port to listen")
+	if *port == "" {
+		*port = "8080"
+	}
+
+	flag.Parse()
+
 	r := mux.NewRouter()
 
 	r.Use(utils.ErrorHandler)
@@ -41,5 +53,5 @@ func main() {
 		utils.NewSuccessResponse(string(bytes), w, r)
 	})
 
-	log.Fatalln(http.ListenAndServe(":8080", r))
+	log.Fatalln(http.ListenAndServe(":"+*port, r))
 }

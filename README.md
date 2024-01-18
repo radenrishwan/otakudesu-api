@@ -1,7 +1,7 @@
 # Otakudesu API
 an Unofficial API for [otakudesu](https://otakudesu.video)
 
-you can access demo here [https://otakudesu-api-psezlumomq-as.a.run.app](https://otakudesu-api-psezlumomq-as.a.run.app) (this is temporary url).
+you can access demo here [otakudesu.up.railway.app](otakudesu.up.railway.app) (this is temporary url).
 ## Usage
 ### NOTE
 before running server, you need to export otakudesu endpoint. you can see at .env file for command or type command below
@@ -57,7 +57,7 @@ you can also running using docker compose
 1. Change endpoint variable on docker-compose.yml file
 2. Run command below
 ```bash
-docker-copomse up -d
+docker-compose up -d
 ```
 
 ## API Docs
