@@ -27,6 +27,17 @@ func main() {
 
 	r.Use(utils.ErrorHandler)
 	r.Use(utils.LoggerHandler)
+	r.NotFoundHandler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		response := utils.DefaultResponse[string]{
+			Code: 404,
+			Data: "page not found",
+		}
+
+		bytes, err := json.Marshal(response)
+		utils.PanicIfError(err)
+
+		utils.NewCustomResponse(string(bytes), 404, w, r)
+	})
 
 	r.HandleFunc("/api/home", scrape.HomePage).Methods("GET")
 	r.HandleFunc("/api/anime-list", scrape.AnimeList).Methods("GET")

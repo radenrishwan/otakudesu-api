@@ -417,9 +417,20 @@ func AnimeGenreList(w http.ResponseWriter, r *http.Request) {
 }
 
 func AnimeFindByGenre(w http.ResponseWriter, r *http.Request) {
+	page := r.URL.Query().Get("page")
+
+	if page == "" {
+		utils.PanicIfError(errors.New("page is required"))
+	}
+
+	_, err := strconv.Atoi(page)
+	if err != nil {
+		utils.PanicIfError(errors.New("page must be number"))
+	}
+
 	params := mux.Vars(r)
 
-	resp, err := http.Get(ENDPOINT + "genres/" + params["genre"])
+	resp, err := http.Get(ENDPOINT + "genres/" + params["genre"] + "/page/" + page)
 	utils.PanicIfError(err)
 	defer resp.Body.Close()
 

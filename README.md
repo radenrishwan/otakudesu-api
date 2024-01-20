@@ -69,9 +69,9 @@ endpoint : https://otakudesu-api-psezlumomq-as.a.run.app/
 | /api/home                | -      | get latest upload anime                   |
 | /api/anime-list          | -      | get anime list                            |
 | /api/genres              | -      | get anime genre                           |
-| /api/anime/ongoing       | page   | get ongoing anime                         |
-| /api/anime/complete      | page   | get complete anime                        |
-| /api/anime/genre/{genre} | -      | get anime by genre                        |
+| /api/anime/ongoing       | *page  | get ongoing anime                         |
+| /api/anime/complete      | *page  | get complete anime                        |
+| /api/anime/genre/{genre} | *page  | get anime by genre                        |
 | /api/anime/{id}          | -      | get anime by id                           |
 | /api/episode/{id}        | -      | get anime episode and download link by id |
 | /api/search              | s      | find anime                                |
