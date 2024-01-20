@@ -26,6 +26,7 @@ func main() {
 	r := mux.NewRouter()
 
 	r.Use(utils.ErrorHandler)
+	r.Use(utils.LoggerHandler)
 
 	r.HandleFunc("/api/home", scrape.HomePage).Methods("GET")
 	r.HandleFunc("/api/anime-list", scrape.AnimeList).Methods("GET")

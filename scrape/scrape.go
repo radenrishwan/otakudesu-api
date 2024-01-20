@@ -403,7 +403,8 @@ func AnimeGenreList(w http.ResponseWriter, r *http.Request) {
 	var result []string
 	document.Find(".genres li a").Each(func(i int, selection *goquery.Selection) {
 		genre := strings.ToLower(selection.Text())
-		result = append(result, genre)
+
+		result = append(result, strings.ReplaceAll(genre, " ", "-"))
 	})
 
 	bytes, err := json.Marshal(utils.DefaultResponse[[]string]{
