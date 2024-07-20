@@ -1,7 +1,6 @@
 package utils
 
 import (
-	"fmt"
 	"net/http"
 )
 
@@ -89,7 +88,7 @@ func NewSuccessResponse(resp string, w http.ResponseWriter, r *http.Request) {
 	w.Header().Add("Content-Type", "application/json")
 	w.WriteHeader(200)
 
-	_, err := fmt.Fprint(w, resp)
+	_, err := w.Write([]byte(resp))
 	PanicIfError(err)
 }
 
@@ -98,6 +97,6 @@ func NewCustomResponse(resp string, code int, w http.ResponseWriter, r *http.Req
 	w.Header().Add("Content-Type", "application/json")
 	w.WriteHeader(code)
 
-	_, err := fmt.Fprint(w, resp)
+	_, err := w.Write([]byte(resp))
 	PanicIfError(err)
 }

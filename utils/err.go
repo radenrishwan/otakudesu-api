@@ -46,5 +46,4 @@ func handleError(w http.ResponseWriter, r *http.Request) {
 
 		return
 	}
-
 }

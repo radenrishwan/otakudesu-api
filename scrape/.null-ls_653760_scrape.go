@@ -190,14 +190,12 @@ func AnimeDetail(w http.ResponseWriter, r *http.Request) {
 func EpisodeDetail(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 
-	var batch bool
+	// check if id has a batch
 	var endpoint string
 	if strings.Contains(params["id"], "batch") {
 		log.Println("batch")
-		batch = true
 		endpoint = ENDPOINT + "batch/" + params["id"]
 	} else {
-		batch = false
 		log.Println("episode")
 		endpoint = ENDPOINT + "episode/" + params["id"]
 	}
@@ -215,54 +213,34 @@ func EpisodeDetail(w http.ResponseWriter, r *http.Request) {
 	document, err := goquery.NewDocumentFromReader(resp.Body)
 	utils.PanicIfError(err)
 
-	fmt.Println()
+	fmt.Println(document.Html)
 
 	var result utils.EpisodeDetail
+	root := document.Find(".venser .venutama")
+	result.Id = params["id"]
+	result.Title = root.Find("h1").Text()
+
 	var urls []utils.UrlInfo
+	root.Find(".download ul li").Each(func(i int, s *goquery.Selection) {
+		var url utils.UrlInfo
+		url.Resolution = s.Find("strong").Text()
 
-	// check if batch or not
-	if !batch {
-		root := document.Find(".venser .venutama")
-		result.Id = params["id"]
-		result.Title = root.Find("h1").Text()
-		root.Find(".download ul li").Each(func(i int, s *goquery.Selection) {
-			var url utils.UrlInfo
-			url.Resolution = s.Find("strong").Text()
+		s.Find("a").Each(func(i int, se *goquery.Selection) {
+			url.Url = se.AttrOr("href", "")
+			url.Host = se.Text()
 
-			s.Find("a").Each(func(i int, se *goquery.Selection) {
-				url.Url = se.AttrOr("href", "")
-				url.Host = se.Text()
+			url.Size = s.Find("i").Text()
 
-				url.Size = s.Find("i").Text()
-
-				urls = append(urls, url)
-			})
+			urls = append(urls, url)
 		})
 
-		result.StreamUrl = root.Find("iframe").AttrOr("src", "")
-	} else {
-		fmt.Println("batch")
-		root := document.Find(".venser")
-		result.Id = params["id"]
-		result.Title = root.Find("h1").Text()
-		root.Find(".download2 div ul li").Each(func(i int, s *goquery.Selection) {
-			var url utils.UrlInfo
-			url.Resolution = s.Find("strong").Text()
-
-			s.Find("a").Each(func(i int, se *goquery.Selection) {
-				url.Url = se.AttrOr("href", "")
-				url.Host = se.Text()
-
-				url.Size = s.Find("i").Text()
-
-				urls = append(urls, url)
-			})
-		})
-	}
-
+	})
 	result.DownloadUrls = urls
 
+	// TODO: check if episode was a batch
+
 	// find streaming url
+	result.StreamUrl = root.Find("iframe").AttrOr("src", "")
 
 	if result.DownloadUrls == nil {
 		bytes, err := json.Marshal(utils.DefaultResponse[string]{

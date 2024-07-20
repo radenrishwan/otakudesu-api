@@ -12,8 +12,6 @@ import (
 	"github.com/radenrishwan/otakudesu-api/utils"
 )
 
-var ()
-
 func main() {
 	envPort := os.Getenv("PORT")
 	port := flag.String("port", envPort, "port to listen")
