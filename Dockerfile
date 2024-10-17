@@ -13,4 +13,4 @@ WORKDIR /app
 EXPOSE 8080
 
 COPY --from=builder /app/main /app
-USER non-rootCMD ./main
+CMD ["./main"]
